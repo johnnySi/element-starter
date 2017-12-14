@@ -2,7 +2,8 @@
     <div id="app">
         <el-container>
             <el-header>
-                <h1>Typography 字体</h1>
+                <i class="el-icon-news"></i>
+                仪表盘
             </el-header>
             <el-container>
                 <el-aside width="200px">
@@ -54,14 +55,12 @@
         background-color: #D3DCE6;
         color: #333;
         text-align: center;
-        line-height: 200px;
     }
 
     .el-main {
         background-color: #E9EEF3;
         color: #333;
         text-align: center;
-        line-height: 160px;
     }
 
     body > .el-container {
