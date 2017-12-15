@@ -3,6 +3,10 @@
         <el-col :span="24">
             <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose"
                      :router="true">
+                <el-menu-item index="/home">
+                    <span slot="title">首页</span>
+                </el-menu-item>
+
                 <el-submenu index="1">
                     <template slot="title">
                         <span>用户角色权限</span>
@@ -12,7 +16,6 @@
                         <el-menu-item index="/basicInfo">基 本 信息</el-menu-item>
                         <el-menu-item index="/RABCInfo">RABC信息</el-menu-item>
                     </el-menu-item-group>
-
 
                 </el-submenu>
 
