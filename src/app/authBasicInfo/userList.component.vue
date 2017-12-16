@@ -122,9 +122,7 @@
             }
         },
         methods: {
-            handleClick(tab, event) {
-                console.log(tab, event);
-            },
+
             addUser() {
                 this.centerDialogVisible = true;
                 this.dialogName = '添加用户';
@@ -133,11 +131,13 @@
                 this.form.userPassword = '';
                 this.isAddUserFlag = true;
             },
+
             delUsers(userRow) {
                 this.tipDialogVisible = true;
                 this.readyDelUserName = userRow.userName;
                 this.form.id = userRow.id;
             },
+
             editUsers(userRow) {
                 this.form.userName = userRow.userName;
                 this.form.userLoginName = userRow.userLoginName;
@@ -146,6 +146,7 @@
                 this.centerDialogVisible = true;
                 this.isAddUserFlag = false;
             },
+
             confirmDialog(delStr) {
                 this.centerDialogVisible = false;
                 this.tipDialogVisible = false;
@@ -159,6 +160,7 @@
                     this.confirmEditUser();
                 }
             },
+
             confirmAddUser() {
                 this.isAddUserFlag = false;
                 app.addUser({
@@ -216,6 +218,7 @@
                         this.$emit('refreshUserList');
                     });
             },
+
             closeDialog() {
                 this.centerDialogVisible = false;
                 this.isAddUserFlag = false;

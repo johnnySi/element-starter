@@ -13,7 +13,7 @@ class AuthBasicServices extends Vue {
     }
 
     getUserByLoginName(loginName) {
-        return this.$http.get(`${APP_CONFIG.isDev}/users/${loginName}`)
+        return this.$http.get(`${APP_CONFIG.isDev}/users/${loginName}/user-login-name`)
             .then(resp => resp.body);
     }
 
@@ -33,17 +33,17 @@ class AuthBasicServices extends Vue {
     }
 
     getUserCounts() {
-        return this.$http.get(`${APP_CONFIG.isDev}/users`)
+        return this.$http.get(`${APP_CONFIG.isDev}/users/counts`)
             .then(resp => resp.body);
     }
 
     getRoleCount() {
-        return this.$http.get(`${APP_CONFIG.isDev}/users`)
+        return this.$http.get(`${APP_CONFIG.isDev}/roles/counts`)
             .then(resp => resp.body);
     }
 
-    getPermission() {
-        return this.$http.get(`${APP_CONFIG.isDev}/users`)
+    getPermissionCount() {
+        return this.$http.get(`${APP_CONFIG.isDev}/permissions/counts`)
             .then(resp => resp.body);
     }
 
