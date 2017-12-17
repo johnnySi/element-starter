@@ -1,10 +1,8 @@
 <template>
     <div class="usersList">
-        <el-button icon="el-icon-plus" class="add-button" round @click="addUser">添加用户</el-button>
+        <el-button icon="el-icon-plus" class="add-button" @click="addUser" type="info">添加</el-button>
         <el-table :data="usersList" style="width: 100%" height="500" border stripe>
-            <el-table-column fixed="left"
-                             type="index"
-                             width="50">
+            <el-table-column fixed="left" type="index" width="50">
             </el-table-column>
 
             <el-table-column fixed prop="id" label="用户表的ID" width="200">
@@ -24,21 +22,19 @@
             <el-table-column fixed="right" label="操作">
                 <template slot-scope="scope">
                     <el-button type="primary" icon="el-icon-edit" @click="editUsers(scope.row)"
-                               size="small" round>编辑
+                               size="small">编辑
                     </el-button>
                     <el-button type="danger" icon="el-icon-delete" @click="delUsers(scope.row)"
-                               size="small" round>移除
+                               size="small">移除
                     </el-button>
                 </template>
             </el-table-column>
         </el-table>
 
 
-        <el-dialog
-                :title="dialogName"
-                :visible.sync="centerDialogVisible"
-                width="30%"
-                center>
+        <el-dialog :title="dialogName" :visible.sync="centerDialogVisible"
+                   width="30%"
+                   center>
             <el-form :model="form" :rules="rules" ref="ruleForm" label-width="100px">
                 <el-form-item label="用户名" prop="userName">
                     <el-input v-model="form.userName" auto-complete="off"></el-input>
@@ -95,13 +91,11 @@
                 tipDialogVisible: false,
                 readyDelUserName: '',
                 dialogName: '',
-
                 form: {
                     userName: '',
                     userLoginName: '',
                     userPassword: ''
                 },
-
                 rules: {
                     userName: [
                         {required: true, message: '请输入用户名', trigger: 'blur'},
@@ -117,12 +111,10 @@
                         {min: 3, message: '至少三个字符', trigger: 'blur'}
                     ]
                 },
-
                 isAddUserFlag: false
             }
         },
         methods: {
-
             addUser() {
                 this.centerDialogVisible = true;
                 this.dialogName = '添加用户';
@@ -148,7 +140,6 @@
             },
 
             confirmDialog(delStr) {
-                this.centerDialogVisible = false;
                 this.tipDialogVisible = false;
                 if (typeof delStr === 'string' && delStr === 'del') {
                     this.confirmDelUser();
@@ -162,26 +153,33 @@
             },
 
             confirmAddUser() {
-                this.isAddUserFlag = false;
-                app.addUser({
-                    userName: this.form.userName,
-                    userLoginName: this.form.userLoginName,
-                    userPassword: this.form.userPassword
-                }).then(resp => {
-                    let {datas} = resp;
-                    this.$notify({
-                        title: datas ? '成功' : '失败',
-                        message: '添加用户成功',
-                        type: datas ? 'success' : 'warning'
-                    });
-                    this.$emit('refreshUserList');
-                }, () => {
-                    this.$notify.error({
-                        title: '错误',
-                        message: '编辑用户错误'
-                    });
+                this.$refs.ruleForm.validate((valid) => {
+                    if (valid) {
+                        app.addUser({
+                            userName: this.form.userName,
+                            userLoginName: this.form.userLoginName,
+                            userPassword: this.form.userPassword
+                        }).then(resp => {
+                            let {datas} = resp;
+                            this.$notify({
+                                title: datas ? '成功' : '失败',
+                                message: '添加用户成功',
+                                type: datas ? 'success' : 'warning'
+                            });
+                            this.centerDialogVisible = false;
+                            this.isAddUserFlag = false;
+                            this.$emit('refreshUserList');
+                        }, () => {
+                            this.$notify.error({
+                                title: '错误',
+                                message: '编辑用户错误'
+                            });
+                        });
+                    } else {
+                        this.centerDialogVisible = true;
+                        this.isAddUserFlag = true;
+                    }
                 });
-
             },
 
             confirmEditUser() {
@@ -197,6 +195,7 @@
                         message: '编辑用户成功',
                         type: datas ? 'success' : 'warning'
                     });
+                    this.centerDialogVisible = false;
                     this.$emit('refreshUserList');
                 }, () => {
                     this.$notify.error({
@@ -215,6 +214,7 @@
                             message: '删除用户成功',
                             type: datas ? 'success' : 'warning'
                         });
+                        this.centerDialogVisible = false;
                         this.$emit('refreshUserList');
                     });
             },

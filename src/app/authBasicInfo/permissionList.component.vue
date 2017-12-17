@@ -1,14 +1,14 @@
 <template>
     <div class="role-list-component">
-        <el-button icon="el-icon-plus" class="add-button"  @click="addRole" type="info">添加</el-button>
-        <el-table :data="rolesList" style="width: 100%" height="500" border stripe>
+        <el-button icon="el-icon-plus" class="add-button" @click="addPermission" type="info">添加</el-button>
+        <el-table :data="permissionsList" style="width: 100%" height="500" border stripe>
             <el-table-column fixed="left" type="index" width="50">
             </el-table-column>
 
-            <el-table-column fixed prop="id" label="角色表ID" width="200">
+            <el-table-column fixed prop="id" label="权限ID" width="200">
             </el-table-column>
 
-            <el-table-column prop="rolesName" label="角色名" width="200" sortable>
+            <el-table-column prop="permissionName" label="权限名" width="200" sortable>
             </el-table-column>
 
             <el-table-column prop="gmtCreate" label="创建时间" width="200" sortable>
@@ -19,10 +19,10 @@
 
             <el-table-column fixed="right" label="操作">
                 <template slot-scope="scope">
-                    <el-button type="primary" icon="el-icon-edit" @click="editRole(scope.row)"
+                    <el-button type="primary" icon="el-icon-edit" @click="editPermission(scope.row)"
                                size="small" >编辑
                     </el-button>
-                    <el-button type="danger" icon="el-icon-delete" @click="delRole(scope.row)"
+                    <el-button type="danger" icon="el-icon-delete" @click="delPermission(scope.row)"
                                size="small" >移除
                     </el-button>
                 </template>
@@ -30,8 +30,8 @@
         </el-table>
         <el-dialog :title="dialogName" center :visible.sync="centerDialogVisible" width="30%">
             <el-form :model="form" :rules="rules">
-                <el-form-item label="角色名" prop="rolesName">
-                    <el-input v-model="form.rolesName" auto-complete="off"></el-input>
+                <el-form-item label="权限名" prop="permissionName">
+                    <el-input v-model="form.permissionName" auto-complete="off"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -55,109 +55,109 @@
     import app from '../services/authBasicInfo.services'
 
     export default {
-        name: 'rolesList',
-        props: ['rolesList'],
+        name: 'permissionsList',
+        props: ['permissionsList'],
         data() {
             return {
                 form: {
-                    rolesName: ''
+                    permissionName: ''
                 },
                 dialogName: '',
                 centerDialogVisible: false,
                 readyDelUserName: '',
                 rules: {
-                    rolesName: [
-                        {required: true, message: '请输入角色', trigger: 'blur'},
+                    permissionName: [
+                        {required: true, message: '请输入权限', trigger: 'blur'},
                         {min: 3, message: '至少三个字符', trigger: 'blur'}
                     ]
                 },
-                isAddRolesFlag: false,
+                isAddPermissionFlag: false,
                 tipDialogVisible: false
             }
         },
         methods: {
-            addRole() {
+            addPermission() {
                 this.centerDialogVisible = true;
-                this.dialogName = '添加角色';
-                this.form.rolesName = '';
-                this.isAddRolesFlag = true;
+                this.dialogName = '添加权限';
+                this.form.permissionName = '';
+                this.isAddPermissionFlag = true;
             },
-            delRole(roleRow) {
+            delPermission(roleRow) {
                 this.tipDialogVisible = true;
-                this.readyDelUserName = roleRow.rolesName;
+                this.readyDelUserName = roleRow.permissionName;
                 this.form.id = roleRow.id;
             },
-            editRole(roleRow) {
-                this.form.rolesName = roleRow.rolesName;
+            editPermission(roleRow) {
+                this.form.permissionName = roleRow.permissionName;
                 this.form.id = roleRow.id;
                 this.centerDialogVisible = true;
-                this.isAddRolesFlag = false;
+                this.isAddPermissionFlag = false;
             },
             confirmDialog(delStr) {
                 this.centerDialogVisible = false;
                 this.tipDialogVisible = false;
                 if (typeof delStr === 'string' && delStr === 'del') {
-                    this.confirmDelRole();
+                    this.confirmDelPermission();
                     return;
                 }
-                if (this.isAddRolesFlag) {
-                    this.confirmAddRole()
+                if (this.isAddPermissionFlag) {
+                    this.confirmAddPermission()
                 } else {
-                    this.confirmEditRole();
+                    this.confirmEditPermission();
                 }
             },
-            confirmAddRole() {
-                this.isAddRolesFlag = false;
-                app.addRole({
-                    rolesName: this.form.rolesName
+            confirmAddPermission() {
+                this.isAddPermissionFlag = false;
+                app.addPermissions({
+                    permissionName: this.form.permissionName
                 }).then(resp => {
                     let {datas} = resp;
-                    this.$emit('refreshRoleList');
+                    this.$emit('refreshPermissionList');
                     this.$notify({
                         title: datas ? '成功' : '失败',
-                        message: '添加角色成功',
+                        message: '添加权限成功',
                         type: datas ? 'success' : 'warning'
                     });
                 }, () => {
                     this.$notify.error({
                         title: '错误',
-                        message: '添加用户错误'
+                        message: '添加权限错误'
                     })
                 });
             },
-            confirmEditRole() {
-                app.editRole({
-                    rolesName: this.form.rolesName
+            confirmEditPermission() {
+                app.editPermission({
+                    permissionName: this.form.permissionName
                 }, this.form.id).then(resp => {
                     let {datas} = resp;
-                    this.$emit('refreshRoleList');
+                    this.$emit('refreshPermissionList');
                     this.$notify({
                         title: datas ? '成功' : '失败',
-                        message: '编辑角色成功',
+                        message: '编辑权限成功',
                         type: datas ? 'success' : 'warning'
                     });
                 }, () => {
                     this.$notify.error({
                         title: '错误',
-                        message: '编辑角色错误'
+                        message: '编辑权限错误'
                     });
                 });
             },
-            confirmDelRole() {
-                app.delRole(this.form.id)
+            confirmDelPermission() {
+                app.delPermission(this.form.id)
                     .then(resp => {
                         let {datas} = resp;
                         this.$notify({
                             title: datas ? '成功' : '失败',
-                            message: '删除用户成功',
+                            message: '权限删除成功',
                             type: datas ? 'success' : 'warning'
                         });
-                        this.$emit('refreshRoleList');
+                        this.$emit('refreshPermissionList');
                     });
             },
             closeDialog() {
                 this.centerDialogVisible = false;
-                this.isAddRolesFlag = false;
+                this.isAddPermissionFlag = false;
                 this.tipDialogVisible = false;
             }
         }

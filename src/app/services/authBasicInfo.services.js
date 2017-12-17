@@ -32,6 +32,46 @@ class AuthBasicServices extends Vue {
             .then(resp => resp.body);
     }
 
+    getRolesList() {
+        return this.$http.get(`${APP_CONFIG.isDev}/roles`)
+            .then(resp => resp.body);
+    }
+
+    addRole(roleModel) {
+        return this.$http.post(`${APP_CONFIG.isDev}/roles`, roleModel)
+            .then(resp => resp.body);
+    }
+
+    editRole(roleModel, roleId) {
+        return this.$http.put(`${APP_CONFIG.isDev}/roles/${roleId}`, roleModel)
+            .then(resp => resp.body);
+    }
+
+    delRole(roleId) {
+        return this.$http.delete(`${APP_CONFIG.isDev}/roles/${roleId}`)
+            .then(resp => resp.body);
+    }
+
+    getPermissionsList() {
+        return this.$http.get(`${APP_CONFIG.isDev}/permissions`)
+            .then(resp => resp.body);
+    }
+
+    addPermissions(permissionModel) {
+        return this.$http.post(`${APP_CONFIG.isDev}/permissions`, permissionModel)
+            .then(resp => resp.body);
+    }
+
+    editPermission(permissionModel, perId) {
+        return this.$http.put(`${APP_CONFIG.isDev}/permissions/${perId}`, permissionModel)
+            .then(resp => resp.body);
+    }
+
+    delPermission(perId) {
+        return this.$http.delete(`${APP_CONFIG.isDev}/permissions/${perId}`)
+            .then(resp => resp.body);
+    }
+
     getUserCounts() {
         return this.$http.get(`${APP_CONFIG.isDev}/users/counts`)
             .then(resp => resp.body);
