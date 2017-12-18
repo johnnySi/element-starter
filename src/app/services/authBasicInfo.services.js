@@ -87,6 +87,16 @@ class AuthBasicServices extends Vue {
             .then(resp => resp.body);
     }
 
+    getUsersRolesLink() {
+        return this.$http.get(`${APP_CONFIG.isDev}/users/roles-link`)
+            .then(resp => resp.body);
+    }
+
+    getUsersRoleByUserId(userId) {
+        return this.$http.get(`${APP_CONFIG.isDev}/users/${userId}/roles-link`)
+            .then(resp => resp.body);
+    }
+
 
 }
 
