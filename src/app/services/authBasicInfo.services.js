@@ -97,6 +97,22 @@ class AuthBasicServices extends Vue {
             .then(resp => resp.body);
     }
 
+    addUserRoleLink(userRoleModel) {
+        return new Promise((resolve, reject)=>{
+            this.delUserRoleLink(userRoleModel.userId).then(()=>{
+                this.$http.post(`${APP_CONFIG.isDev}/users/roles/link`, userRoleModel)
+                    .then(resp =>  resolve(resp.body));
+            });
+        });
+
+        return
+    }
+
+    delUserRoleLink(userId) {
+        return this.$http.delete(`${APP_CONFIG.isDev}/users/${userId}/roles-link`)
+            .then(resp => resp.body);
+    }
+
 
 }
 

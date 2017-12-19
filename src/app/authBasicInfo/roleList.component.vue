@@ -1,6 +1,6 @@
 <template>
     <div class="role-list-component">
-        <el-button icon="el-icon-plus" class="add-button"  @click="addRole" type="info">添加</el-button>
+        <el-button icon="el-icon-plus" class="add-button" @click="addRole" type="info">添加</el-button>
         <el-table :data="rolesList" style="width: 100%" height="500" border stripe>
             <el-table-column fixed="left" type="index" width="50">
             </el-table-column>
@@ -20,10 +20,10 @@
             <el-table-column fixed="right" label="操作">
                 <template slot-scope="scope">
                     <el-button type="primary" icon="el-icon-edit" @click="editRole(scope.row)"
-                               size="small" >编辑
+                               size="small">编辑
                     </el-button>
                     <el-button type="danger" icon="el-icon-delete" @click="delRole(scope.row)"
-                               size="small" >移除
+                               size="small">移除
                     </el-button>
                 </template>
             </el-table-column>
@@ -113,16 +113,16 @@
                 }).then(resp => {
                     let {datas} = resp;
                     this.$emit('refreshRoleList');
-                    this.$notify({
-                        title: datas ? '成功' : '失败',
+                    this.$message({
                         message: '添加角色成功',
                         type: datas ? 'success' : 'warning'
                     });
                 }, () => {
-                    this.$notify.error({
-                        title: '错误',
-                        message: '添加用户错误'
-                    })
+                    this.$message({
+                        showClose: true,
+                        message: '编辑角色错误',
+                        type: 'error'
+                    });
                 });
             },
             confirmEditRole() {
@@ -131,15 +131,16 @@
                 }, this.form.id).then(resp => {
                     let {datas} = resp;
                     this.$emit('refreshRoleList');
-                    this.$notify({
-                        title: datas ? '成功' : '失败',
+                    this.$message({
+                        showClose: true,
                         message: '编辑角色成功',
                         type: datas ? 'success' : 'warning'
                     });
                 }, () => {
-                    this.$notify.error({
-                        title: '错误',
-                        message: '编辑角色错误'
+                    this.$message({
+                        showClose: true,
+                        message: '编辑角色错误',
+                        type: 'error'
                     });
                 });
             },
@@ -147,8 +148,7 @@
                 app.delRole(this.form.id)
                     .then(resp => {
                         let {datas} = resp;
-                        this.$notify({
-                            title: datas ? '成功' : '失败',
+                        this.$message({
                             message: '删除用户成功',
                             type: datas ? 'success' : 'warning'
                         });

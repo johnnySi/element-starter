@@ -2,7 +2,6 @@
     <div class="rabc-component">
         <el-tabs v-model="activeName">
             <el-tab-pane label="用户角色管理" name="first">
-
                 <el-dropdown @command="handleCommand" trigger="click">
                     <el-button type="primary">
                         当前用户：{{currentUser}} <i class="el-icon-arrow-down el-icon--right"></i>
@@ -25,8 +24,9 @@
                         :format="transferFormat"
                         @change="handleChange"
                         :data="transferLeftList">
-                    <el-button class="transfer-footer" slot="left-footer" size="small">操作</el-button>
-                    <el-button class="transfer-footer" slot="right-footer" size="small">操作</el-button>
+                    <el-button class="transfer-footer" slot="right-footer" size="small" type="primary"
+                               @click="saveRoles">保存操作
+                    </el-button>
                 </el-transfer>
 
 
@@ -48,31 +48,54 @@
                 activeName: 'first',
                 currentUser: '',
                 dropDownUsersList: [],
-                value3: [1],
                 transferFormat: {
                     noChecked: '${total}',
                     hasChecked: '${checked}/${total}'
                 },
                 transferLeftList: [],
-                transferRightList: []
+                transferRightList: [],
+                curUserId: 0
             }
         },
         methods: {
             handleCommand(command) {
                 this.currentUser = command;
                 let curLoginName = _.find(this.dropDownUsersList, resp => resp.userLoginName === command);
+                this.curUserId = curLoginName.id;
                 this.getUserRoleByUserId(curLoginName.id);
             },
             handleChange(value, direction, movedKeys) {
-                console.log(value, direction, movedKeys);
+                console.log(direction, movedKeys);
             },
             getUserRoleByUserId(userId) {
                 app.getUsersRoleByUserId(userId).then(resp => {
-                    this.transferRightList = _.map(resp, item => {
+                    this.transferRightList = _.map(resp.datas, item => {
                         return item.id;
                     });
                 });
 
+            },
+            saveRoles() {
+                let userId = this.curUserId;
+                let roleId = _.compact(this.transferRightList);
+                if (roleId.length > 1) {
+                    this.$message({
+                        showClose: true,
+                        message: '每个用户只能对应一个角色',
+                        type: 'error'
+                    });
+                    return;
+                }
+                app.addUserRoleLink({
+                    userId,
+                    roleId: roleId[0]
+                }).then(resp => {
+                    this.$message({
+                        showClose: true,
+                        message: '添加角色成功',
+                        type: 'success'
+                    });
+                });
             }
         },
         created() {
@@ -92,8 +115,6 @@
                     }
                 });
             });
-
-
         }
     }
 
@@ -107,5 +128,9 @@
     .transfer-footer {
         margin-left: 20px;
         padding: 6px 5px;
+    }
+
+    .el-transfer-panel {
+        width: 500px;
     }
 </style>

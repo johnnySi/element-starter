@@ -20,10 +20,10 @@
             <el-table-column fixed="right" label="操作">
                 <template slot-scope="scope">
                     <el-button type="primary" icon="el-icon-edit" @click="editPermission(scope.row)"
-                               size="small" >编辑
+                               size="small">编辑
                     </el-button>
                     <el-button type="danger" icon="el-icon-delete" @click="delPermission(scope.row)"
-                               size="small" >移除
+                               size="small">移除
                     </el-button>
                 </template>
             </el-table-column>
@@ -113,16 +113,15 @@
                 }).then(resp => {
                     let {datas} = resp;
                     this.$emit('refreshPermissionList');
-                    this.$notify({
-                        title: datas ? '成功' : '失败',
+                    this.$message({
                         message: '添加权限成功',
                         type: datas ? 'success' : 'warning'
                     });
                 }, () => {
-                    this.$notify.error({
-                        title: '错误',
-                        message: '添加权限错误'
-                    })
+                    this.$message({
+                        message: '编辑权限错误',
+                        type: 'error'
+                    });
                 });
             },
             confirmEditPermission() {
@@ -131,15 +130,14 @@
                 }, this.form.id).then(resp => {
                     let {datas} = resp;
                     this.$emit('refreshPermissionList');
-                    this.$notify({
-                        title: datas ? '成功' : '失败',
+                    this.$message({
                         message: '编辑权限成功',
                         type: datas ? 'success' : 'warning'
                     });
                 }, () => {
-                    this.$notify.error({
-                        title: '错误',
-                        message: '编辑权限错误'
+                    this.$message({
+                        message: '编辑权限错误',
+                        type: 'error'
                     });
                 });
             },
@@ -147,8 +145,7 @@
                 app.delPermission(this.form.id)
                     .then(resp => {
                         let {datas} = resp;
-                        this.$notify({
-                            title: datas ? '成功' : '失败',
+                        this.$message({
                             message: '权限删除成功',
                             type: datas ? 'success' : 'warning'
                         });

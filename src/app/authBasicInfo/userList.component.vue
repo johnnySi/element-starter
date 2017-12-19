@@ -161,8 +161,7 @@
                             userPassword: this.form.userPassword
                         }).then(resp => {
                             let {datas} = resp;
-                            this.$notify({
-                                title: datas ? '成功' : '失败',
+                            this.$message({
                                 message: '添加用户成功',
                                 type: datas ? 'success' : 'warning'
                             });
@@ -170,9 +169,9 @@
                             this.isAddUserFlag = false;
                             this.$emit('refreshUserList');
                         }, () => {
-                            this.$notify.error({
-                                title: '错误',
-                                message: '编辑用户错误'
+                            this.$message({
+                                message: '编辑用户错误',
+                                type:'error'
                             });
                         });
                     } else {
@@ -190,17 +189,16 @@
                     }, this.form.id
                 ).then(resp => {
                     let {datas} = resp;
-                    this.$notify({
-                        title: datas ? '成功' : '失败',
+                    this.$message({
                         message: '编辑用户成功',
                         type: datas ? 'success' : 'warning'
                     });
                     this.centerDialogVisible = false;
                     this.$emit('refreshUserList');
                 }, () => {
-                    this.$notify.error({
-                        title: '错误',
-                        message: '编辑用户错误'
+                    this.$message({
+                        message: '编辑用户错误',
+                        type:'error'
                     });
                 });
             },
@@ -209,8 +207,7 @@
                 app.delUser(this.form.id)
                     .then(resp => {
                         let {datas} = resp;
-                        this.$notify({
-                            title: datas ? '成功' : '失败',
+                        this.$message({
                             message: '删除用户成功',
                             type: datas ? 'success' : 'warning'
                         });
