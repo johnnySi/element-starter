@@ -87,32 +87,43 @@ class AuthBasicServices extends Vue {
             .then(resp => resp.body);
     }
 
-    getUsersRolesLink() {
-        return this.$http.get(`${APP_CONFIG.isDev}/users/roles-link`)
-            .then(resp => resp.body);
-    }
-
     getUsersRoleByUserId(userId) {
-        return this.$http.get(`${APP_CONFIG.isDev}/users/${userId}/roles-link`)
+        return this.$http.get(`${APP_CONFIG.isDev}/users/${userId}/roles`)
             .then(resp => resp.body);
     }
 
     addUserRoleLink(userRoleModel) {
-        return new Promise((resolve, reject)=>{
-            this.delUserRoleLink(userRoleModel.userId).then(()=>{
+        return new Promise((resolve, reject) => {
+            this.delUserRoleLink(userRoleModel.userId).then(() => {
                 this.$http.post(`${APP_CONFIG.isDev}/users/roles/link`, userRoleModel)
-                    .then(resp =>  resolve(resp.body));
+                    .then(resp => resolve(resp.body));
             });
         });
-
-        return
     }
 
     delUserRoleLink(userId) {
-        return this.$http.delete(`${APP_CONFIG.isDev}/users/${userId}/roles-link`)
+        return this.$http.delete(`${APP_CONFIG.isDev}/users/${userId}/roles`)
             .then(resp => resp.body);
     }
 
+    getRolePermissionByRoleId(roleId) {
+        return this.$http.get(`${APP_CONFIG.isDev}/roles/${roleId}/permission`)
+            .then(resp => resp.body);
+    }
+
+    addRolePermissionLink(rolePermissionModel) {
+        return new Promise((resolve) => {
+            this.delRolePerLink(rolePermissionModel.roleId).then(()=>{
+                this.$http.post(`${APP_CONFIG.isDev}/roles/permission/link`, rolePermissionModel)
+                    .then(resp => resolve(resp.body));
+            })
+        });
+    }
+
+    delRolePerLink(roleId) {
+        return this.$http.delete(`${APP_CONFIG.isDev}/roles/${roleId}/permission`)
+            .then(resp => resp.body);
+    }
 
 }
 

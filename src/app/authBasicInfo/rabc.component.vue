@@ -32,7 +32,34 @@
 
             </el-tab-pane>
             <el-tab-pane label="角色权限管理" name="second">
-                2
+
+                <el-dropdown @command="handleCommand4Roles" trigger="click">
+                    <el-button type="primary">
+                        当前用户：{{curRole}} <i class="el-icon-arrow-down el-icon--right"></i>
+                    </el-button>
+                    <el-dropdown-menu slot="dropdown">
+                        <template v-for="item in dropDownRolesList">
+                            <el-dropdown-item :command="item.rolesName">
+                                {{item.rolesName}}
+                            </el-dropdown-item>
+                        </template>
+                    </el-dropdown-menu>
+                </el-dropdown>
+
+                <el-transfer
+                        v-model="transferPermissionRight"
+                        filterable
+                        filter-placeholder="请输入角色"
+                        :titles="['所有权限', '角色拥有的权限']"
+                        :button-texts="['到左边', '到右边']"
+                        :format="transferFormat"
+                        @change="handleChange"
+                        :data="transferPermission">
+                    <el-button class="transfer-footer" slot="right-footer" size="small" type="primary"
+                               @click="saveRolesPermission">保存操作
+                    </el-button>
+                </el-transfer>
+
             </el-tab-pane>
         </el-tabs>
     </div>
@@ -47,26 +74,40 @@
             return {
                 activeName: 'first',
                 currentUser: '',
+                curRole: '',
                 dropDownUsersList: [],
+                dropDownRolesList: [],
                 transferFormat: {
                     noChecked: '${total}',
                     hasChecked: '${checked}/${total}'
                 },
                 transferLeftList: [],
                 transferRightList: [],
-                curUserId: 0
+                curUserId: 0,
+                curRoleId: 0,
+                transferPermission: [],
+                transferPermissionRight: []
             }
         },
         methods: {
             handleCommand(command) {
                 this.currentUser = command;
-                let curLoginName = _.find(this.dropDownUsersList, resp => resp.userLoginName === command);
-                this.curUserId = curLoginName.id;
-                this.getUserRoleByUserId(curLoginName.id);
+                let userItem = _.find(this.dropDownUsersList, resp => resp.userLoginName === command);
+                this.curUserId = userItem.id;
+                this.getUserRoleByUserId(userItem.id);
             },
+
+            handleCommand4Roles(command) {
+                this.curRole = command;
+                let roleItem = _.find(this.dropDownRolesList, resp => resp.rolesName === command);
+                this.curRoleId = roleItem.id;
+                this.getRolePermissionByRoleId(roleItem.id);
+            },
+
             handleChange(value, direction, movedKeys) {
                 console.log(direction, movedKeys);
             },
+
             getUserRoleByUserId(userId) {
                 app.getUsersRoleByUserId(userId).then(resp => {
                     this.transferRightList = _.map(resp.datas, item => {
@@ -75,6 +116,16 @@
                 });
 
             },
+
+            getRolePermissionByRoleId(roleId) {
+                app.getRolePermissionByRoleId(roleId)
+                    .then(resp => {
+                        this.transferPermissionRight = _.map(resp.datas, item => {
+                            return item.id;
+                        });
+                    })
+            },
+
             saveRoles() {
                 let userId = this.curUserId;
                 let roleId = _.compact(this.transferRightList);
@@ -96,15 +147,32 @@
                         type: 'success'
                     });
                 });
+            },
+            saveRolesPermission() {
+                let roleId = this.curRoleId;
+                let perIds = _.compact(this.transferPermissionRight);
+
+                app.addRolePermissionLink({
+                    roleId,
+                    perIds
+                }).then(resp => {
+                    this.$message({
+                        showClose: true,
+                        message: '添加权限成功',
+                        type: 'success'
+                    });
+                });
             }
         },
         created() {
+
             app.getUsersList().then(resp => {
                 let {datas} = resp;
                 this.currentUser = datas[0].userLoginName;
                 this.dropDownUsersList = datas;
                 this.handleCommand(this.currentUser);
             });
+
             app.getRolesList().then(resp => {
                 let {datas} = resp;
                 this.transferLeftList = _.map(datas, (item, index) => {
@@ -114,7 +182,22 @@
                         disabled: false
                     }
                 });
+                this.dropDownRolesList = resp.datas;
+                this.curRole = resp.datas[0].rolesName;
+                this.handleCommand4Roles(this.curRole);
             });
+
+            app.getPermissionsList()
+                .then(resp => {
+                    let {datas} = resp;
+                    this.transferPermission = _.map(datas, (item, index) => {
+                        return {
+                            key: item.id,
+                            label: `${index + 1} ${item.permissionName}`,
+                            disabled: false
+                        }
+                    });
+                });
         }
     }
 

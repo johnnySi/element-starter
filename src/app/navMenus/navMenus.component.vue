@@ -1,7 +1,7 @@
 <template>
     <el-row class="tac">
         <el-col :span="24">
-            <el-menu default-active="2" class="el-menu-vertical-demo" @open="handleOpen" @close="handleClose"
+            <el-menu default-active="2" class="el-menu-vertical-demo"
                      :router="true">
                 <el-menu-item index="/home">
                     <span slot="title">首页</span>
@@ -28,14 +28,6 @@
         name: 'NavMenus',
         data() {
             return {};
-        },
-        methods: {
-            handleOpen(key, keyPath) {
-                console.log(key, keyPath);
-            },
-            handleClose(key, keyPath) {
-                console.log(key, keyPath);
-            }
         }
     }
 </script>
