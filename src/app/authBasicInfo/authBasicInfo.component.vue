@@ -1,16 +1,22 @@
 <template>
-    <el-tabs v-model="activeName">
-        <el-tab-pane label="用户列表信息" name="first">
-            <users-list :usersList="usersList" @refreshUserList="refreshUserList"></users-list>
-        </el-tab-pane>
-        <el-tab-pane label="角色列表信息" name="second">
-            <roles-list :rolesList="rolesList" @refreshRoleList="refreshRoleList"></roles-list>
-        </el-tab-pane>
-        <el-tab-pane label="权限列表信息" name="third">
-            <permissions-list :permissionsList="permissionsList"
-                              @refreshPermissionList="refreshPermissionList"></permissions-list>
-        </el-tab-pane>
-    </el-tabs>
+    <div class="authInfo-component">
+        <el-row>
+            <el-col :span="24">
+                <el-tabs v-model="activeName">
+                    <el-tab-pane label="用户列表信息" name="first">
+                        <users-list :usersList="usersList" @refreshUserList="refreshUserList"></users-list>
+                    </el-tab-pane>
+                    <el-tab-pane label="角色列表信息" name="second">
+                        <roles-list :rolesList="rolesList" @refreshRoleList="refreshRoleList"></roles-list>
+                    </el-tab-pane>
+                    <el-tab-pane label="权限列表信息" name="third">
+                        <permissions-list :permissionsList="permissionsList"
+                                          @refreshPermissionList="refreshPermissionList"></permissions-list>
+                    </el-tab-pane>
+                </el-tabs>
+            </el-col>
+        </el-row>
+    </div>
 </template>
 
 <script>

@@ -1,37 +1,43 @@
 <template>
     <div class="usersList">
-        <el-button icon="el-icon-plus" class="add-button" @click="addUser" type="info">添加</el-button>
-        <el-table :data="usersList" style="width: 100%" height="500" border stripe>
-            <el-table-column fixed="left" type="index" width="50">
-            </el-table-column>
+        <el-row>
+            <el-col :span="6" :offset="20">
+                <el-button icon="el-icon-plus" class="add-button" @click="addUser" type="info">添加</el-button>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
+                <el-table :data="usersList" style="width: 100%" height="500" border stripe>
+                    <el-table-column fixed="left" type="index" width="50">
+                    </el-table-column>
 
-            <el-table-column fixed prop="id" label="用户表的ID" width="200">
-            </el-table-column>
+                    <el-table-column fixed prop="id" label="用户表的ID" width="200">
+                    </el-table-column>
 
-            <el-table-column prop="userName" label="用户名" width="200" sortable>
-            </el-table-column>
+                    <el-table-column prop="userName" label="用户名" width="200" sortable>
+                    </el-table-column>
 
-            <el-table-column prop="userLoginName" label="用户登录名" width="200" sortable>
-            </el-table-column>
+                    <el-table-column prop="userLoginName" label="用户登录名" width="200" sortable>
+                    </el-table-column>
 
-            <el-table-column prop="gmtCreate" label="创建时间" width="200" sortable>
-            </el-table-column>
+                    <el-table-column prop="gmtCreate" label="创建时间" width="200" sortable>
+                    </el-table-column>
 
-            <el-table-column prop="gmtModified" label="修改时间" width="200" sortable>
-            </el-table-column>
-            <el-table-column fixed="right" label="操作">
-                <template slot-scope="scope">
-                    <el-button type="primary" icon="el-icon-edit" @click="editUsers(scope.row)"
-                               size="small">编辑
-                    </el-button>
-                    <el-button type="danger" icon="el-icon-delete" @click="delUsers(scope.row)"
-                               size="small">移除
-                    </el-button>
-                </template>
-            </el-table-column>
-        </el-table>
-
-
+                    <el-table-column prop="gmtModified" label="修改时间" width="200" sortable>
+                    </el-table-column>
+                    <el-table-column fixed="right" label="操作">
+                        <template slot-scope="scope">
+                            <el-button type="primary" icon="el-icon-edit" @click="editUsers(scope.row)"
+                                       size="small">编辑
+                            </el-button>
+                            <el-button type="danger" icon="el-icon-delete" @click="delUsers(scope.row)"
+                                       size="small">移除
+                            </el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-col>
+        </el-row>
         <el-dialog :title="dialogName" :visible.sync="centerDialogVisible"
                    width="30%"
                    center>
@@ -54,8 +60,6 @@
                 <el-button type="primary" @click="confirmDialog">确 定</el-button>
             </span>
         </el-dialog>
-
-
         <el-dialog title="是否删除？" :visible.sync="tipDialogVisible" width="30%" center>
             <span>是否删除{{readyDelUserName}}</span>
             <span slot="footer" class="dialog-footer">
@@ -225,7 +229,4 @@
     }
 </script>
 <style>
-    .add-button {
-        float: left;
-    }
 </style>

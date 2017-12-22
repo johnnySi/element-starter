@@ -1,33 +1,41 @@
 <template>
     <div class="role-list-component">
-        <el-button icon="el-icon-plus" class="add-button" @click="addRole" type="info">添加</el-button>
-        <el-table :data="rolesList" style="width: 100%" height="500" border stripe>
-            <el-table-column fixed="left" type="index" width="50">
-            </el-table-column>
+        <el-row>
+            <el-col :span="6" :offset="20">
+                <el-button icon="el-icon-plus" class="add-button" @click="addRole" type="info">添加</el-button>
+            </el-col>
+        </el-row>
+        <el-row>
+            <el-col :span="24">
+                <el-table :data="rolesList" style="width: 100%" height="500" border stripe>
+                    <el-table-column fixed="left" type="index" width="50">
+                    </el-table-column>
 
-            <el-table-column fixed prop="id" label="角色表ID" width="200">
-            </el-table-column>
+                    <el-table-column fixed prop="id" label="角色表ID" width="200">
+                    </el-table-column>
 
-            <el-table-column prop="rolesName" label="角色名" width="200" sortable>
-            </el-table-column>
+                    <el-table-column prop="rolesName" label="角色名" width="200" sortable>
+                    </el-table-column>
 
-            <el-table-column prop="gmtCreate" label="创建时间" width="200" sortable>
-            </el-table-column>
+                    <el-table-column prop="gmtCreate" label="创建时间" width="200" sortable>
+                    </el-table-column>
 
-            <el-table-column prop="gmtModified" label="修改时间" width="200" sortable>
-            </el-table-column>
+                    <el-table-column prop="gmtModified" label="修改时间" width="200" sortable>
+                    </el-table-column>
 
-            <el-table-column fixed="right" label="操作">
-                <template slot-scope="scope">
-                    <el-button type="primary" icon="el-icon-edit" @click="editRole(scope.row)"
-                               size="small">编辑
-                    </el-button>
-                    <el-button type="danger" icon="el-icon-delete" @click="delRole(scope.row)"
-                               size="small">移除
-                    </el-button>
-                </template>
-            </el-table-column>
-        </el-table>
+                    <el-table-column fixed="right" label="操作">
+                        <template slot-scope="scope">
+                            <el-button type="primary" icon="el-icon-edit" @click="editRole(scope.row)"
+                                       size="small">编辑
+                            </el-button>
+                            <el-button type="danger" icon="el-icon-delete" @click="delRole(scope.row)"
+                                       size="small">移除
+                            </el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+            </el-col>
+        </el-row>
         <el-dialog :title="dialogName" center :visible.sync="centerDialogVisible" width="30%">
             <el-form :model="form" :rules="rules">
                 <el-form-item label="角色名" prop="rolesName">

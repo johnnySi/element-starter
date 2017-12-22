@@ -1,67 +1,80 @@
 <template>
     <div class="rabc-component">
-        <el-tabs v-model="activeName">
-            <el-tab-pane label="用户角色管理" name="first">
-                <el-dropdown @command="handleCommand" trigger="click">
-                    <el-button type="primary">
-                        当前用户：{{currentUser}} <i class="el-icon-arrow-down el-icon--right"></i>
-                    </el-button>
-                    <el-dropdown-menu slot="dropdown">
-                        <template v-for="item in dropDownUsersList">
-                            <el-dropdown-item :command="item.userLoginName">
-                                {{item.userLoginName}}
-                            </el-dropdown-item>
-                        </template>
-                    </el-dropdown-menu>
-                </el-dropdown>
+        <el-row>
+            <el-col :span="24">
+                <el-tabs v-model="activeName">
+                    <el-tab-pane label="用户角色管理" name="first">
+                        <el-row>
+                            <el-col :span="6">
+                                <el-dropdown @command="handleCommand" trigger="click">
+                                    <el-button type="primary">
+                                        当前用户：{{currentUser}} <i class="el-icon-arrow-down el-icon--right"></i>
+                                    </el-button>
+                                    <el-dropdown-menu slot="dropdown">
+                                        <template v-for="item in dropDownUsersList">
+                                            <el-dropdown-item :command="item.userLoginName">
+                                                {{item.userLoginName}}
+                                            </el-dropdown-item>
+                                        </template>
+                                    </el-dropdown-menu>
+                                </el-dropdown>
+                            </el-col>
 
-                <el-transfer
-                        v-model="transferRightList"
-                        filterable
-                        filter-placeholder="请输入角色"
-                        :titles="['所有角色', '用户拥有的角色']"
-                        :button-texts="['到左边', '到右边']"
-                        :format="transferFormat"
-                        @change="handleChange"
-                        :data="transferLeftList">
-                    <el-button class="transfer-footer" slot="right-footer" size="small" type="primary"
-                               @click="saveRoles">保存操作
-                    </el-button>
-                </el-transfer>
+                        </el-row>
+                        <el-row>
+                            <el-col :span="24">
+                                <el-transfer
+                                        v-model="transferRightList"
+                                        filterable
+                                        filter-placeholder="请输入角色"
+                                        :titles="['所有角色', '用户拥有的角色']"
+                                        :button-texts="['到左边', '到右边']"
+                                        :format="transferFormat"
+                                        @change="handleChange"
+                                        :data="transferLeftList">
+                                    <el-button class="transfer-footer" slot="right-footer" size="small" type="primary"
+                                               @click="saveRoles">保存操作
+                                    </el-button>
+                                </el-transfer>
+                            </el-col>
+                        </el-row>
 
+                    </el-tab-pane>
 
-            </el-tab-pane>
-            <el-tab-pane label="角色权限管理" name="second">
+                    <el-tab-pane label="角色权限管理" name="second">
 
-                <el-dropdown @command="handleCommand4Roles" trigger="click">
-                    <el-button type="primary">
-                        当前用户：{{curRole}} <i class="el-icon-arrow-down el-icon--right"></i>
-                    </el-button>
-                    <el-dropdown-menu slot="dropdown">
-                        <template v-for="item in dropDownRolesList">
-                            <el-dropdown-item :command="item.rolesName">
-                                {{item.rolesName}}
-                            </el-dropdown-item>
-                        </template>
-                    </el-dropdown-menu>
-                </el-dropdown>
+                        <el-dropdown @command="handleCommand4Roles" trigger="click">
+                            <el-button type="primary">
+                                当前用户：{{curRole}} <i class="el-icon-arrow-down el-icon--right"></i>
+                            </el-button>
+                            <el-dropdown-menu slot="dropdown">
+                                <template v-for="item in dropDownRolesList">
+                                    <el-dropdown-item :command="item.rolesName">
+                                        {{item.rolesName}}
+                                    </el-dropdown-item>
+                                </template>
+                            </el-dropdown-menu>
+                        </el-dropdown>
 
-                <el-transfer
-                        v-model="transferPermissionRight"
-                        filterable
-                        filter-placeholder="请输入角色"
-                        :titles="['所有权限', '角色拥有的权限']"
-                        :button-texts="['到左边', '到右边']"
-                        :format="transferFormat"
-                        @change="handleChange"
-                        :data="transferPermission">
-                    <el-button class="transfer-footer" slot="right-footer" size="small" type="primary"
-                               @click="saveRolesPermission">保存操作
-                    </el-button>
-                </el-transfer>
+                        <el-transfer
+                                v-model="transferPermissionRight"
+                                filterable
+                                filter-placeholder="请输入角色"
+                                :titles="['所有权限', '角色拥有的权限']"
+                                :button-texts="['到左边', '到右边']"
+                                :format="transferFormat"
+                                @change="handleChange"
+                                :data="transferPermission">
+                            <el-button class="transfer-footer" slot="right-footer" size="small" type="primary"
+                                       @click="saveRolesPermission">保存操作
+                            </el-button>
+                        </el-transfer>
 
-            </el-tab-pane>
-        </el-tabs>
+                    </el-tab-pane>
+                </el-tabs>
+            </el-col>
+        </el-row>
+
     </div>
 </template>
 <script>
@@ -204,16 +217,4 @@
 </script>
 
 <style>
-    .el-tab-pane {
-        text-align: left;
-    }
-
-    .transfer-footer {
-        margin-left: 20px;
-        padding: 6px 5px;
-    }
-
-    .el-transfer-panel {
-        width: 500px;
-    }
 </style>
