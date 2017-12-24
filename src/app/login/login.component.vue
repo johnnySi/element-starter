@@ -9,14 +9,13 @@
             </div>
             <el-form ref="form" :model="form" label-width="100px">
                 <el-form-item label="用户登录名">
-                    <el-input v-model="form.name" placeholder="请输入用户登录名"></el-input>
+                    <el-input v-model="form.userLoginName" placeholder="请输入用户登录名"></el-input>
                 </el-form-item>
                 <el-form-item label="密码">
-                    <el-input v-model="form.password" type="password" placeholder="请输入密码"></el-input>
+                    <el-input v-model="form.userPassword" type="password" placeholder="请输入密码"></el-input>
                 </el-form-item>
                 <div class="bottom clearfix">
-                    <el-button type="primary" @click="submitForm('ruleForm2')">提交</el-button>
-                    <el-button @click="resetForm('ruleForm2')">重置</el-button>
+                    <el-button type="primary" @click="submitForm('ruleForm2')">登录</el-button>
                 </div>
             </el-form>
         </el-card>
@@ -28,14 +27,15 @@
         name: 'loginComponent',
         data() {
             return {
-                form: {},
+                form: {
+                    userLoginName: '',
+                    userPassword: ''
+                },
                 loginTitle: '用户登录'
             }
         },
         methods: {
-            submitForm() {
-            },
-            resetForm() {
+            userLogin() {
             }
         }
     }
