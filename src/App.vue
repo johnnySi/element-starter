@@ -7,10 +7,6 @@
 
 </template>
 <style>
-    #app {
-        font-family: Helvetica, sans-serif;
-        text-align: center;
-    }
 
     .el-container {
         height: 720px;
@@ -19,19 +15,12 @@
     .el-header, .el-footer {
         background-color: #B3C0D1;
         color: #333;
-        text-align: center;
         line-height: 60px;
     }
 
     .el-aside {
         background-color: #D3DCE6;
         color: #333;
-        text-align: center;
-    }
-
-    .el-main {
-        color: #333;
-        text-align: center;
     }
 
     body > .el-container {
