@@ -12,9 +12,9 @@
                             <span>用户角色权限</span>
                         </template>
                         <el-menu-item-group>
-                            <el-menu-item index="/dashBoard/userInfo">用户信息</el-menu-item>
-                            <el-menu-item index="/dashBoard/roleInfo">角色信息</el-menu-item>
-                            <el-menu-item index="/dashBoard/persInfo">权限信息</el-menu-item>
+                            <el-menu-item index="/dashBoard/userInfo">用户管理</el-menu-item>
+                            <el-menu-item index="/dashBoard/roleInfo">角色管理</el-menu-item>
+                            <el-menu-item index="/dashBoard/persInfo">权限管理</el-menu-item>
                             <el-menu-item index="/dashBoard/RABCInfo">RABC管理</el-menu-item>
                         </el-menu-item-group>
                     </el-submenu>

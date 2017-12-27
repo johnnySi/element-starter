@@ -1,3 +1,5 @@
+import userSerices from './userServices'
+
 class ValidateServices {
     userLoginNameValidate(rule, value, callback) {
         if (value === '') {
@@ -13,6 +15,17 @@ class ValidateServices {
         } else {
             callback();
         }
+    }
+
+    userLoginName4UserListValidate(rule, value, callback) {
+        userSerices.getUserByLoginName(value)
+            .then(resp => {
+                if (resp.datas.length !== 0) {
+                    callback(new Error('登录名已经存在'));
+                } else {
+                    callback();
+                }
+            })
     }
 }
 

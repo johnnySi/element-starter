@@ -27,7 +27,7 @@
 </template>
 
 <script>
-    import viewServices from '../../../services/viewServices'
+    import viewServices from '~/app/services/viewServices'
 
     export default {
         name: 'homeViews',
@@ -53,6 +53,10 @@
 </script>
 
 <style scoped>
+    .home-component {
+        height: 100%;
+    }
+
     .box-card {
         color: white;
         background-color: #909399;

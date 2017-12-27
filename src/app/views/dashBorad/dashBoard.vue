@@ -9,7 +9,7 @@
                     <left-menus-list></left-menus-list>
                 </el-aside>
                 <el-main>
-                    <transition name="el-zoom-in-top">
+                    <transition name="el-fade-in-linear">
                         <router-view/>
                     </transition>
                 </el-main>

@@ -9,7 +9,7 @@
 <style>
 
     .el-container {
-        height: 720px;
+        min-height: 720px;
     }
 
     .el-header, .el-footer {
