@@ -5,7 +5,7 @@
                 {{userListName}}
             </el-col>
             <el-col :span="6" :offset="12" class="user-list-btn">
-                <el-button icon="el-icon-plus" class="add-button" type="primary">添加</el-button>
+                <el-button icon="el-icon-plus" class="add-button" type="primary" @click="openAddDialog">添加</el-button>
             </el-col>
         </el-row>
         <el-row>
@@ -60,17 +60,27 @@
                 </el-form-item>
 
                 <el-form-item label="用户登录名" prop="userLoginName">
-                    <el-input v-model="dialogForm.userLoginName" auto-complete="off"></el-input>
+                    <el-input v-model="dialogForm.userLoginName" auto-complete="off"
+                              :disabled="!isAddUserFlag"></el-input>
                 </el-form-item>
 
                 <el-form-item label="密码" prop="userPassword">
-                    <el-input v-model="dialogForm.userPassword" auto-complete="off"></el-input>
+                    <el-input v-model="dialogForm.userPassword" auto-complete="off"
+                              :disabled="!isAddUserFlag"></el-input>
                 </el-form-item>
 
             </el-form>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="closeDialog">取 消</el-button>
                 <el-button type="primary" @click="confirmDialog">确 定</el-button>
+            </span>
+        </el-dialog>
+
+        <el-dialog title="是否删除？" :visible.sync="isDelConfirmDialog" width="30%" center>
+            <span>是否删除{{readyDelUserName}}</span>
+            <span slot="footer" class="dialog-footer">
+                <el-button @click="closeDialog">取 消</el-button>
+                <el-button type="primary" @click="confirmDialog('del')">确 定</el-button>
             </span>
         </el-dialog>
     </div>
@@ -87,11 +97,15 @@
                 userListName: '用户列表',
                 usersList: [],
                 dialogForm: {
+                    id: 0,
                     userName: '',
                     userLoginName: '',
                     userPassword: ''
                 },
                 diaLoginVisible: false,
+                isAddUserFlag: false,
+                isDelConfirmDialog: false,
+                readyDelUserName: '',
                 dialogName: '',
                 rules: {
                     userName: [
@@ -111,17 +125,101 @@
             }
         },
         created() {
-            userServices.getUserList()
-                .then(resp => {
-                    let {datas} = resp;
-                    this.usersList = datas;
-                })
+            this.refreshUserList();
         },
+
         methods: {
             editUser(editUser) {
+                this.isAddUserFlag = false;
+                this.dialogForm.userName = editUser.userName;
+                this.dialogForm.userLoginName = editUser.userLoginName;
+                this.dialogForm.id = editUser.id;
+                this.dialogForm.userPassword = editUser.userPassword;
+                this.diaLoginVisible = true;
             },
             deleteUser(delUser) {
+                this.isDelConfirmDialog = true;
+                this.readyDelUserName = delUser.userName;
+                this.dialogForm.id = delUser.id;
+            },
+            openAddDialog() {
+                this.diaLoginVisible = true;
+                this.isAddUserFlag = true;
+                this.dialogForm.userName = '';
+                this.dialogForm.userLoginName = '';
+                this.dialogForm.userPassword = '';
+            },
+            confirmDialog(isDelStr) {
+                if (typeof isDelStr === 'string' && isDelStr === 'del') {
+                    this.isDelConfirmDialog = false;
+                    this.__delUserToServices();
+                    return;
+                }
+                if (this.isAddUserFlag) {
+                    this.__addUserToServices();
+                } else {
+                    this.__editUserToService();
+                }
 
+            },
+            closeDialog() {
+                this.diaLoginVisible = false;
+                this.isAddUserFlag = false;
+                this.isDelConfirmDialog = false;
+            },
+
+            refreshUserList() {
+                userServices.getUserList()
+                    .then(resp => {
+                        let {datas} = resp;
+                        this.usersList = datas;
+                    })
+            },
+            __delUserToServices() {
+                userServices.delUser(this.dialogForm.id)
+                    .then(resp => {
+                        let {datas} = resp;
+                        this.$message({
+                            message: '删除用户成功',
+                            type: datas ? 'success' : 'warning'
+                        });
+                        this.refreshUserList();
+                        this.closeDialog();
+                    });
+            },
+            __addUserToServices() {
+                this.$refs.ruleForm.validate(values => {
+                    if (values) {
+                        let {userName, userLoginName, userPassword} = this.dialogForm;
+                        userServices.addUser({userName, userLoginName, userPassword})
+                            .then(resp => {
+                                let {datas} = resp;
+                                this.$message({
+                                    message: '添加用户成功',
+                                    type: datas ? 'success' : 'warning'
+                                });
+                                this.diaLoginVisible = false;
+                                this.refreshUserList();
+                            });
+                    }
+                });
+            },
+            __editUserToService() {
+                this.$refs.ruleForm.validate(values => {
+                    if (values) {
+                        let {userName, userLoginName, userPassword} = this.dialogForm;
+                        userServices.editUser({userName, userLoginName, userPassword}, this.dialogForm.id)
+                            .then(resp => {
+                                let {datas} = resp;
+                                this.$message({
+                                    message: '编辑用户成功',
+                                    type: datas ? 'success' : 'warning'
+                                });
+                                this.diaLoginVisible = false;
+                                this.refreshUserList();
+                            });
+                    }
+                });
             }
         }
     }
