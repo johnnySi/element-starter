@@ -18,7 +18,7 @@
     </div>
 </template>
 <script>
-    import leftMenusList from '../../components/leftMenusList/leftMenusListComponent.vue'
+    import leftMenusList from '~/app/components/leftMenusList/leftMenusListComponent.vue'
 
     export default {
         name: 'dashBoard',

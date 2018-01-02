@@ -15,7 +15,7 @@
                             <el-menu-item index="/dashBoard/userInfo">用户管理</el-menu-item>
                             <el-menu-item index="/dashBoard/roleInfo">角色管理</el-menu-item>
                             <el-menu-item index="/dashBoard/persInfo">权限管理</el-menu-item>
-                            <el-menu-item index="/dashBoard/RABCInfo">RABC管理</el-menu-item>
+                            <el-menu-item index="/dashBoard/rabcInfo">RABC管理</el-menu-item>
                         </el-menu-item-group>
                     </el-submenu>
                 </el-menu>

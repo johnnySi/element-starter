@@ -126,10 +126,12 @@
         },
         created() {
             this.refreshUserList();
+            this.closeDialog();
         },
 
         methods: {
             editUser(editUser) {
+                this.dialogName = '编辑用户';
                 this.isAddUserFlag = false;
                 this.dialogForm.userName = editUser.userName;
                 this.dialogForm.userLoginName = editUser.userLoginName;
@@ -138,11 +140,13 @@
                 this.diaLoginVisible = true;
             },
             deleteUser(delUser) {
+                this.dialogName = '删除用户';
                 this.isDelConfirmDialog = true;
                 this.readyDelUserName = delUser.userName;
                 this.dialogForm.id = delUser.id;
             },
             openAddDialog() {
+                this.dialogName = '添加用户';
                 this.diaLoginVisible = true;
                 this.isAddUserFlag = true;
                 this.dialogForm.userName = '';

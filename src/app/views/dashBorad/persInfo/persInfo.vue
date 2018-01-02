@@ -1,25 +1,24 @@
 <template>
-    <div class="roles-manager">
+    <div class="permission-manager">
         <el-row>
             <el-col :span="6" class="user-list-title">
-                {{roleListName}}
+                {{permissionListName}}
             </el-col>
             <el-col :span="6" :offset="12" class="role-list-btn">
                 <el-button icon="el-icon-plus" class="add-button" type="primary" @click="openAddDialog">添加</el-button>
             </el-col>
         </el-row>
-
         <el-row>
-            <el-table :data="rolesList" style="width: 100%" height="500" border stripe>
+            <el-table :data="persList" style="width: 100%" height="500" border stripe>
                 <el-table-column fixed="left" type="index" width="50">
                 </el-table-column>
 
-                <el-table-column fixed prop="id" label="角色表ID" width="200">
+                <el-table-column fixed prop="id" label="权限ID" width="200">
                 </el-table-column>
 
-                <el-table-column label="角色名" width="200" sortable>
+                <el-table-column label="权限名" width="200" sortable>
                     <template slot-scope="scope">
-                        <el-tag size="medium" type="info">{{scope.row.rolesName}}</el-tag>
+                        <el-tag size="medium">{{scope.row.permissionName}}</el-tag>
                     </template>
                 </el-table-column>
 
@@ -39,10 +38,10 @@
 
                 <el-table-column fixed="right" label="操作">
                     <template slot-scope="scope">
-                        <el-button type="text" icon="el-icon-edit" @click="editRole(scope.row)"
+                        <el-button type="text" icon="el-icon-edit" @click="editPermission(scope.row)"
                                    size="small">编辑
                         </el-button>
-                        <el-button type="text" icon="el-icon-delete" @click="delRole(scope.row)"
+                        <el-button type="text" icon="el-icon-delete" @click="delPermission(scope.row)"
                                    size="small">移除
                         </el-button>
                     </template>
@@ -51,9 +50,9 @@
         </el-row>
 
         <el-dialog :title="dialogName" center :visible.sync="diaLoginVisible" width="30%">
-            <el-form :model="roleForm">
-                <el-form-item label="角色名">
-                    <el-input v-model="roleForm.rolesName" auto-complete="off"></el-input>
+            <el-form :model="persForms">
+                <el-form-item label="权限名">
+                    <el-input v-model="persForms.permissionName" auto-complete="off"></el-input>
                 </el-form-item>
             </el-form>
             <span slot="footer" class="dialog-footer">
@@ -62,7 +61,7 @@
             </span>
         </el-dialog>
 
-        <el-dialog title="是否删除？" :visible.sync="isDelConfirmDialog" width="30%" center>
+        <el-dialog title="是否删除？" :visible.sync="tipDialogVisible" width="30%" center>
             <span>是否删除{{readyDelUserName}}</span>
             <span slot="footer" class="dialog-footer">
                 <el-button @click="closeDialog">取 消</el-button>
@@ -73,126 +72,121 @@
 </template>
 
 <script>
-    import rolesServices from '~/app/services/roleServices'
+    import persServices from '~/app/services/persServices'
 
     export default {
-        name: 'rolesInfo',
+        name: 'persInfo',
         data() {
             return {
-                roleListName: '角色列表',
-                rolesList: [],
-                diaLoginVisible: false,
-                isAddUserFlag: false,
+                permissionListName: '权限列表',
+                persList: [],
                 dialogName: '',
-                roleForm: {
-                    rolesName: '',
+                diaLoginVisible: false,
+                isAddPersFlag: false,
+                tipDialogVisible: false,
+                persForms: {
+                    permissionName: '',
                     id: 0
                 },
-                isDelConfirmDialog: false,
                 readyDelUserName: ''
             }
         },
         methods: {
+
             openAddDialog() {
                 this.diaLoginVisible = true;
-                this.isAddUserFlag = true;
-                this.dialogName = '添加角色';
-                this.roleForm.rolesName = '';
-            },
-            editRole(editRole) {
-                this.diaLoginVisible = true;
-                this.isAddUserFlag = false;
-                this.roleForm.rolesName = editRole.rolesName;
-                this.roleForm.id = editRole.id;
-                this.dialogName = '编辑角色';
-            },
-            delRole(delRole) {
-                this.isDelConfirmDialog = true;
-                this.readyDelUserName = delRole.rolesName;
-                this.roleForm.id = delRole.id;
-                this.dialogName = '删除角色';
+                this.isAddPersFlag = true;
+                this.persForms.permissionName = '';
             },
 
-            confirmDialog(isDeleteStr) {
-                if (typeof isDeleteStr === 'string' && isDeleteStr === 'del') {
-                    this.isDelConfirmDialog = false;
-                    this.__delRoleDialog();
-                    return;
-                }
-                if (this.isAddUserFlag) {
-                    this.__addRoleDialog();
-                } else {
-                    this.__editRoleDialog();
-                }
+            editPermission(editPers) {
+                this.persForms.permissionName = editPers.permissionName;
+                this.persForms.id = editPers.id;
+                this.diaLoginVisible = true;
+                this.dialogName = '编辑权限';
+            },
+
+            delPermission(delPers) {
+                this.persForms.id = delPers.id;
+                this.tipDialogVisible = true;
+                this.readyDelUserName = delPers.permissionName;
+                this.dialogName = '删除权限';
             },
 
             closeDialog() {
                 this.diaLoginVisible = false;
-                this.isAddUserFlag = false;
-                this.isDelConfirmDialog = false;
+                this.isAddPersFlag = false;
+                this.tipDialogVisible = false;
             },
 
-            __delRoleDialog() {
-                rolesServices.delRole(this.roleForm.id)
+            confirmDialog(isDeleteStr) {
+                if (typeof isDeleteStr === 'string' && isDeleteStr === 'del') {
+                    this.__delPersListServices();
+                    return;
+                }
+                if (this.isAddPersFlag) {
+                    this.__addPersListServices()
+                } else {
+                    this.__editPersListServices();
+                }
+            },
+
+            __delPersListServices() {
+                persServices.delPermission(this.persForms.id)
                     .then(resp => {
                         let {datas} = resp;
                         this.$message({
-                            message: '删除角色成功',
+                            message: '权限删除成功',
                             type: datas ? 'success' : 'warning'
                         });
-                        this.__refreshRolesList();
+                        this.__refreshPersList();
                         this.closeDialog();
                     });
             },
-            __addRoleDialog() {
-                rolesServices.addRole({
-                    rolesName: this.roleForm.rolesName
+
+            __addPersListServices() {
+                persServices.addPermissions({
+                    permissionName: this.persForms.permissionName
                 }).then(resp => {
                     let {datas} = resp;
+                    this.$emit('refreshPermissionList');
                     this.$message({
-                        message: '添加角色成功',
+                        message: '添加权限成功',
                         type: datas ? 'success' : 'warning'
                     });
-                    this.isAddUserFlag = false;
-                    this.__refreshRolesList();
+                    this.__refreshPersList();
                     this.closeDialog();
                 });
-
             },
 
-            __editRoleDialog() {
-                rolesServices.editRole({
-                    rolesName: this.roleForm.rolesName
-                }, this.roleForm.id).then(resp => {
+            __editPersListServices() {
+                persServices.editPermission({
+                    permissionName: this.persForms.permissionName
+                }, this.persForms.id).then(resp => {
                     let {datas} = resp;
+                    this.$emit('refreshPermissionList');
                     this.$message({
-                        showClose: true,
-                        message: '编辑角色成功',
+                        message: '编辑权限成功',
                         type: datas ? 'success' : 'warning'
                     });
-                    this.__refreshRolesList();
+                    this.__refreshPersList();
                     this.closeDialog();
                 });
             },
-
-            __refreshRolesList() {
-                rolesServices.getRolesList()
+            __refreshPersList() {
+                persServices.getPermissionsList()
                     .then(resp => {
-                        let {datas} = resp;
-                        this.rolesList = datas;
-                    })
+                        this.persList = resp.datas;
+                    });
             }
         },
         created() {
-            this.__refreshRolesList();
-            this.diaLoginVisible = false;
-            this.isAddUserFlag = false;
+            this.__refreshPersList();
+            this.closeDialog();
         }
     }
 </script>
 
 <style>
-    .role-list-btn {
-        text-align: right;
-    }
+
 </style>
